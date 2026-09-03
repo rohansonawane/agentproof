@@ -1,6 +1,7 @@
 # AgentProof
 
 [![CI](https://github.com/rohansonawane/agentproof/actions/workflows/ci.yml/badge.svg)](https://github.com/rohansonawane/agentproof/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/agentproof-sim.svg)](https://pypi.org/project/agentproof-sim/)
 
 AgentProof is a Python testing framework for AI agents that take actions through tools.
 
@@ -50,7 +51,7 @@ That separation is what lets `timeout_after_commit` catch duplicate refunds, boo
 pip install agentproof-sim
 ```
 
-The PyPI distribution is `agentproof-sim` because `agentproof` is already occupied by an unrelated package. The Python import and CLI remain stable:
+The PyPI distribution is [`agentproof-sim`](https://pypi.org/project/agentproof-sim/) because `agentproof` is already occupied by an unrelated package. The Python import and CLI remain stable:
 
 ```python
 import agentproof

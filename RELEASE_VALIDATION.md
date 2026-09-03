@@ -10,9 +10,9 @@ The repository initially contained only `AGENTPROOF_CODEX_BUILD_SPEC.md`; `IMPLE
 
 I implemented and validated a technical-preview `0.1.1` package with deterministic native execution, fault injection, replay, CLI, JSON/JUnit reports, pytest plugin, clean wheel install, local OpenAI/LangChain adapter-boundary coverage, and an opt-in live OpenAI Agents SDK smoke test.
 
-The public PyPI distribution name is now `agentproof-sim`; the Python import package and CLI remain `agentproof`. Live PyPI checks on 2026-09-03 showed `agentproof` and `agentproof-ai` are already occupied by unrelated projects, while `agentproof-sim` returned no project at check time. That name is not reserved until Rohan Sonawane creates/publishes the PyPI project from his own account.
+The public PyPI distribution name is now `agentproof-sim`; the Python import package and CLI remain `agentproof`. Live PyPI checks on 2026-09-03 showed `agentproof` and `agentproof-ai` are already occupied by unrelated projects. `agentproof-sim==0.1.1` was published from `rohansonawane/agentproof` using PyPI Trusted Publishing/OIDC.
 
-Release readiness is **technical preview only**, not full public-stable approval, because the `agentproof-sim` PyPI project has not yet been created under Rohan's account, no live LangChain provider test exists, and `reorder_tool_results` remains unsupported rather than falsely implemented.
+Release readiness is **technical preview only**, not full public-stable approval, because no live LangChain provider test exists and `reorder_tool_results` remains unsupported rather than falsely implemented.
 
 ## Commands Run
 
@@ -31,6 +31,11 @@ Release readiness is **technical preview only**, not full public-stable approval
 | `python scripts/release_hardening.py` | PASS, `13` checks passed, `2` opt-in checks skipped |
 | clean temp venv `python -m pip install -e ".[dev]"` | PASS, `agentproof-sim` metadata and `agentproof.__version__` both reported `0.1.1` |
 | `gh run watch 33746954869 --repo rohansonawane/agentproof --exit-status` | PASS, GitHub-hosted CI matrix passed on Python 3.11, 3.12, and 3.13 |
+| `gh release create v0.1.1 ... --prerelease` | PASS, GitHub prerelease created with `agentproof_sim-0.1.1` wheel and sdist |
+| `gh run watch 33804853781 --repo rohansonawane/agentproof --exit-status` | PASS, GitHub-hosted CI matrix passed for commit `778cd7c03e18b77539edab3f7f61dbe76ac511b1` |
+| `gh run watch 33805590092 --repo rohansonawane/agentproof --exit-status` | PASS, GitHub release workflow built and checked artifacts for `v0.1.1` |
+| `gh workflow run release.yml --ref main -f publish_to_pypi=true` + watch run `33805680882` | PASS, published `agentproof-sim==0.1.1` to PyPI using Trusted Publishing/OIDC |
+| clean temp venv `python -m pip install --no-cache-dir agentproof-sim` | PASS, downloaded from `files.pythonhosted.org`; `agentproof-sim` metadata and `agentproof.__version__` both reported `0.1.1` |
 | `python scripts/real_project_booking_smoke.py` | PASS, real external booking-agent tool produced duplicate side effects under retry and AgentProof caught it |
 | `python scripts/real_project_matrix.py` | PASS, 3 pinned public projects, 6 AgentProof runs, 8 actual effects recorded, 2 duplicate side-effect failures caught, `agentproof_version=0.1.1` |
 
@@ -194,6 +199,5 @@ Live model tests and hosted GitHub Actions are intentionally not automatic by de
 
 - The OpenAI live smoke test passed, but no live LangChain provider test exists yet. Live tests remain opt-in.
 - Real-project evidence currently covers 3 public pinned projects. That is useful launch evidence, not a statistical guarantee across the agent ecosystem.
-- The `agentproof-sim` PyPI project has not yet been created/reserved under Rohan Sonawane's account, and Trusted Publisher configuration still needs to be completed before PyPI publication.
 - `reorder_tool_results` is not stable and intentionally raises unsupported instead of pretending to work.
 - `duplicate_tool_result` is implemented as a deterministic duplicate-result envelope but remains experimental because framework agent-loop semantics vary.
