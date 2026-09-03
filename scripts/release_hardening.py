@@ -319,7 +319,7 @@ def write_results(checks: list[Check], path: Path) -> None:
             "skipped": len([check for check in checks if check.status == "SKIP"]),
         },
     }
-    path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 
 def print_summary(checks: list[Check], path: Path) -> None:

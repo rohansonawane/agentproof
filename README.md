@@ -20,6 +20,8 @@ It is useful for agents that can change things:
 - running internal operations or DevOps workflows.
 
 See [Real-World Use Cases](docs/use-cases.md) for concrete examples and invariants.
+See [Real-Project Evidence](docs/real-project-evidence.md) for pinned public
+agent-related projects that AgentProof has been run against.
 
 AgentProof does not prove that an agent is universally safe or correct. It gives you repeatable tests for dangerous action-level failures before they reach production.
 

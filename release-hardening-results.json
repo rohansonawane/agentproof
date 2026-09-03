@@ -10,7 +10,7 @@
     {
       "name": "Ruff format",
       "status": "PASS",
-      "detail": "75 files already formatted",
+      "detail": "82 files already formatted",
       "command": "ruff format --check ."
     },
     {
@@ -28,19 +28,19 @@
     {
       "name": "Pytest",
       "status": "PASS",
-      "detail": "s..................................................                      [100%] | 50 passed, 1 skipped in 1.86s",
+      "detail": "s.....................................................                   [100%] | 53 passed, 1 skipped in 1.76s",
       "command": "pytest -q"
     },
     {
       "name": "Keyless deterministic pytest",
       "status": "PASS",
-      "detail": "..................................................                       [100%] | 50 passed, 1 deselected in 1.66s",
+      "detail": ".....................................................                    [100%] | 53 passed, 1 deselected in 1.73s",
       "command": "pytest -q -m not live"
     },
     {
       "name": "Coverage",
       "status": "PASS",
-      "detail": "src/agentproof/tools/registry.py              67      7    90% | -------------------------------------------------------------- | TOTAL                                       1370    136    90% | 50 passed, 1 skipped in 3.25s",
+      "detail": "src/agentproof/tools/registry.py              67      7    90% | -------------------------------------------------------------- | TOTAL                                       1370    136    90% | 53 passed, 1 skipped in 3.46s",
       "command": "pytest -q -p pytest_asyncio.plugin -p pytest_cov --cov=agentproof --cov-report=term"
     },
     {
@@ -81,8 +81,8 @@
     },
     {
       "name": "Live tests",
-      "status": "PASS",
-      "detail": ".                                                                        [100%] | 1 passed, 50 deselected in 9.65s",
+      "status": "SKIP",
+      "detail": "pass --live and set credentials to run",
       "command": null
     },
     {
@@ -93,8 +93,8 @@
     }
   ],
   "summary": {
-    "passed": 14,
+    "passed": 13,
     "failed": 0,
-    "skipped": 1
+    "skipped": 2
   }
 }

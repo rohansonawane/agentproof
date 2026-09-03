@@ -1,0 +1,326 @@
+{
+  "passed": true,
+  "generated_at": "2026-09-03T12:27:05.915844+00:00",
+  "agentproof_version": "0.1.0",
+  "agentproof_source": "local checkout installed into a clean temporary virtual environment",
+  "summary": {
+    "projects_tested": 3,
+    "agentproof_runs": 6,
+    "invariant_failures": 2,
+    "expected_failures_detected": 2,
+    "duplicate_side_effects_detected": 2,
+    "effects_recorded": 8
+  },
+  "included_projects": [
+    {
+      "key": "langchain_booking_appointment_create",
+      "name": "aniket-work/Lets-Build-Online-Booking-System-Using-AI-Agents",
+      "repo_url": "https://github.com/aniket-work/Lets-Build-Online-Booking-System-Using-AI-Agents",
+      "requested_ref": "7cc5937038ceb9d90a1212257d31233d265ef519",
+      "actual_ref": "7cc5937038ceb9d90a1212257d31233d265ef519",
+      "framework_boundary": "LangChain StructuredTool.invoke",
+      "side_effect": "streamlit.session_state.appointments append",
+      "expected_signal": "unsafe retry creates two real appointments and fails invariant",
+      "passed": true,
+      "scenario": "Retry a real LangChain appointment-creation tool after commit timeout.",
+      "assertions": [
+        "baseline_status_pass",
+        "baseline_effects_equal_real_appointments",
+        "mutated_status_invariant_failure",
+        "mutated_effects_equal_real_appointments",
+        "mutated_real_appointments_count_is_2"
+      ],
+      "runs": [
+        {
+          "name": "book_one_appointment:baseline",
+          "status": "PASS",
+          "mutation": null,
+          "effect_count": 1,
+          "external_side_effect_count": 1,
+          "expected_failure_detected": false,
+          "duplicate_side_effect_detected": false,
+          "violated_invariants": [],
+          "failure": null,
+          "effects": [
+            {
+              "id": "eff_001",
+              "type": "appointment.booked",
+              "tool_name": "book_appointment",
+              "operation": "create",
+              "resource": "appointment:2026-09-10T10:30:00",
+              "data": {
+                "appointment_index": 1,
+                "name": "Rohan",
+                "type": "demo",
+                "time": "2026-09-10T10:30:00"
+              },
+              "committed_at": 0.0,
+              "idempotency_key": null,
+              "invocation_id": "invocation_001"
+            }
+          ]
+        },
+        {
+          "name": "book_one_appointment:timeout_after_commit:book_appointment",
+          "status": "INVARIANT_FAILURE",
+          "mutation": "timeout_after_commit",
+          "effect_count": 2,
+          "external_side_effect_count": 2,
+          "expected_failure_detected": true,
+          "duplicate_side_effect_detected": true,
+          "violated_invariants": [
+            "no_duplicate_appointments"
+          ],
+          "failure": "booked 2 appointments, expected <= 1",
+          "effects": [
+            {
+              "id": "eff_001",
+              "type": "appointment.booked",
+              "tool_name": "book_appointment",
+              "operation": "create",
+              "resource": "appointment:2026-09-10T10:30:00",
+              "data": {
+                "appointment_index": 1,
+                "name": "Rohan",
+                "type": "demo",
+                "time": "2026-09-10T10:30:00"
+              },
+              "committed_at": 0.0,
+              "idempotency_key": null,
+              "invocation_id": "invocation_001"
+            },
+            {
+              "id": "eff_002",
+              "type": "appointment.booked",
+              "tool_name": "book_appointment",
+              "operation": "create",
+              "resource": "appointment:2026-09-10T10:30:00",
+              "data": {
+                "appointment_index": 2,
+                "name": "Rohan",
+                "type": "demo",
+                "time": "2026-09-10T10:30:00"
+              },
+              "committed_at": 0.0,
+              "idempotency_key": null,
+              "invocation_id": "invocation_002"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "langchain_medora_appointment_reschedule",
+      "name": "extremecoder-rgb/medoraAI",
+      "repo_url": "https://github.com/extremecoder-rgb/medoraAI",
+      "requested_ref": "26838fc355628e0383ae59dd8acf1b02ed2920e1",
+      "actual_ref": "26838fc355628e0383ae59dd8acf1b02ed2920e1",
+      "framework_boundary": "LangChain StructuredTool.invoke",
+      "side_effect": "streamlit.session_state.appointments in-place update",
+      "expected_signal": "retry does not create a second ledger effect when no second state change occurs",
+      "passed": true,
+      "scenario": "Retry a real LangChain appointment-reschedule tool after commit timeout.",
+      "assertions": [
+        "baseline_status_pass",
+        "baseline_effects_equal_real_reschedules",
+        "mutated_status_pass",
+        "mutated_effects_equal_real_reschedules",
+        "mutated_real_reschedules_count_is_1"
+      ],
+      "runs": [
+        {
+          "name": "reschedule_one_appointment:baseline",
+          "status": "PASS",
+          "mutation": null,
+          "effect_count": 1,
+          "external_side_effect_count": 1,
+          "expected_failure_detected": false,
+          "duplicate_side_effect_detected": false,
+          "violated_invariants": [],
+          "failure": null,
+          "effects": [
+            {
+              "id": "eff_001",
+              "type": "appointment.rescheduled",
+              "tool_name": "reschedule_appointment",
+              "operation": "update",
+              "resource": "appointment:2026-09-09T10:00:00",
+              "data": {
+                "name": "Rohan",
+                "doctor_name": "Dr. Smith",
+                "old_time": "2026-09-09T10:00:00",
+                "new_time": "2026-09-11T10:00:00",
+                "status": "rescheduled"
+              },
+              "committed_at": 0.0,
+              "idempotency_key": null,
+              "invocation_id": "invocation_001"
+            }
+          ]
+        },
+        {
+          "name": "reschedule_one_appointment:timeout_after_commit:reschedule_appointment",
+          "status": "PASS",
+          "mutation": "timeout_after_commit",
+          "effect_count": 1,
+          "external_side_effect_count": 1,
+          "expected_failure_detected": false,
+          "duplicate_side_effect_detected": false,
+          "violated_invariants": [],
+          "failure": null,
+          "effects": [
+            {
+              "id": "eff_001",
+              "type": "appointment.rescheduled",
+              "tool_name": "reschedule_appointment",
+              "operation": "update",
+              "resource": "appointment:2026-09-09T10:00:00",
+              "data": {
+                "name": "Rohan",
+                "doctor_name": "Dr. Smith",
+                "old_time": "2026-09-09T10:00:00",
+                "new_time": "2026-09-11T10:00:00",
+                "status": "rescheduled"
+              },
+              "committed_at": 0.0,
+              "idempotency_key": null,
+              "invocation_id": "invocation_001"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "custom_tool_file_append",
+      "name": "Notnaton/oiv2",
+      "repo_url": "https://github.com/Notnaton/oiv2",
+      "requested_ref": "489923b679ab63d4edf2bd879e75486592a0c1fc",
+      "actual_ref": "489923b679ab63d4edf2bd879e75486592a0c1fc",
+      "framework_boundary": "project-local function_tool wrapper",
+      "side_effect": "filesystem append inside isolated temporary project directory",
+      "expected_signal": "unsafe retry appends twice and fails invariant",
+      "passed": true,
+      "scenario": "Retry a real project-local file append tool after commit timeout.",
+      "assertions": [
+        "baseline_status_pass",
+        "baseline_effects_equal_file_lines",
+        "mutated_status_invariant_failure",
+        "mutated_effects_equal_file_lines",
+        "mutated_file_line_count_is_2"
+      ],
+      "runs": [
+        {
+          "name": "append_one_file_record:baseline",
+          "status": "PASS",
+          "mutation": null,
+          "effect_count": 1,
+          "external_side_effect_count": 1,
+          "expected_failure_detected": false,
+          "duplicate_side_effect_detected": false,
+          "violated_invariants": [],
+          "failure": null,
+          "effects": [
+            {
+              "id": "eff_001",
+              "type": "file.appended",
+              "tool_name": "write",
+              "operation": "update",
+              "resource": ".agentproof-sandbox/agent-output.txt",
+              "data": {
+                "bytes_appended": 12,
+                "line_count_after": 1,
+                "message": "Appended 12 chars to <repo>/.agentproof-sandbox/agent-output.txt"
+              },
+              "committed_at": 0.0,
+              "idempotency_key": null,
+              "invocation_id": "invocation_001"
+            }
+          ]
+        },
+        {
+          "name": "append_one_file_record:timeout_after_commit:write",
+          "status": "INVARIANT_FAILURE",
+          "mutation": "timeout_after_commit",
+          "effect_count": 2,
+          "external_side_effect_count": 2,
+          "expected_failure_detected": true,
+          "duplicate_side_effect_detected": true,
+          "violated_invariants": [
+            "no_duplicate_file_append"
+          ],
+          "failure": "file append happened 2 times, expected <= 1",
+          "effects": [
+            {
+              "id": "eff_001",
+              "type": "file.appended",
+              "tool_name": "write",
+              "operation": "update",
+              "resource": ".agentproof-sandbox/agent-output.txt",
+              "data": {
+                "bytes_appended": 12,
+                "line_count_after": 1,
+                "message": "Appended 12 chars to <repo>/.agentproof-sandbox/agent-output.txt"
+              },
+              "committed_at": 0.0,
+              "idempotency_key": null,
+              "invocation_id": "invocation_001"
+            },
+            {
+              "id": "eff_002",
+              "type": "file.appended",
+              "tool_name": "write",
+              "operation": "update",
+              "resource": ".agentproof-sandbox/agent-output.txt",
+              "data": {
+                "bytes_appended": 12,
+                "line_count_after": 2,
+                "message": "Appended 12 chars to <repo>/.agentproof-sandbox/agent-output.txt"
+              },
+              "committed_at": 0.0,
+              "idempotency_key": null,
+              "invocation_id": "invocation_002"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "rejected_projects": [
+    {
+      "name": "kapa-ai/langchain-agent-example",
+      "repo_url": "https://github.com/kapa-ai/langchain-agent-example",
+      "ref": "c441a42c5956710d64e64a40bbea353a12db9afb",
+      "reason": "tool files are explicitly mock/read-only examples, not real state mutations"
+    },
+    {
+      "name": "Hegazy360/langchain-multi-agent",
+      "repo_url": "https://github.com/Hegazy360/langchain-multi-agent",
+      "ref": "0950344d913f30846321a31d0cc08b1f4c2bcfc1",
+      "reason": "imports live OpenAI/Tavily dependencies and the mutating-looking tool is a placeholder"
+    },
+    {
+      "name": "hungson175/mini-claw-code",
+      "repo_url": "https://github.com/hungson175/mini-claw-code",
+      "ref": "2c22914b4c23242ff1c9d28d2bc6e4e0e3b5411a",
+      "reason": "module starts an interactive live-LLM loop at import time"
+    },
+    {
+      "name": "AdityaUnal/RentalShop",
+      "repo_url": "https://github.com/AdityaUnal/RentalShop",
+      "ref": "add45b60fbe71ae170d720cf960348a889403e64",
+      "reason": "real SQLite writes exist, but module import initializes HuggingFace/retriever stack"
+    },
+    {
+      "name": "cornflowerblu/strands-agent-shopper",
+      "repo_url": "https://github.com/cornflowerblu/strands-agent-shopper",
+      "ref": "9dfee90716811bf9cc1dcfc0e31480fe82d1b3ef",
+      "reason": "real cart operations require authenticated HEB account state"
+    },
+    {
+      "name": "sujay3srivastava/AI-Agent-Hackathon",
+      "repo_url": "https://github.com/sujay3srivastava/AI-Agent-Hackathon",
+      "ref": "13892eeda6e8afab083f58696301e8a00ab72a52",
+      "reason": "appointment tool is real, but the page reads Streamlit secrets and calls OpenAI at import"
+    }
+  ]
+}
