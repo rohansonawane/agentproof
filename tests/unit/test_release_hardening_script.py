@@ -70,3 +70,20 @@ def test_pytest_plugin_trace_does_not_consume_live_credentials(monkeypatch: Any)
     assert check.status == "PASS"
     assert captured_env is not None
     assert "AGENTPROOF_RUN_LIVE_TESTS" not in captured_env
+
+
+def test_wheel_path_uses_pyproject_distribution_name(tmp_path: Path, monkeypatch: Any) -> None:
+    module = load_release_hardening()
+    (tmp_path / "pyproject.toml").write_text(
+        '[project]\nname = "agentproof-sim"\n',
+        encoding="utf-8",
+    )
+    dist = tmp_path / "dist"
+    dist.mkdir()
+    legacy_wheel = dist / "agentproof-0.1.0-py3-none-any.whl"
+    current_wheel = dist / "agentproof_sim-0.1.1-py3-none-any.whl"
+    legacy_wheel.write_text("", encoding="utf-8")
+    current_wheel.write_text("", encoding="utf-8")
+    monkeypatch.setattr(module, "ROOT", tmp_path)
+
+    assert module.wheel_path() == current_wheel

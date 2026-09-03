@@ -10,10 +10,18 @@ from pathlib import Path
 def test_readme_quickstart_python_block_executes(tmp_path: Path) -> None:
     root = Path(__file__).resolve().parents[2]
     readme = (root / "README.md").read_text(encoding="utf-8")
-    block = re.search(r"```python\n(.*?)\n```", readme, re.DOTALL)
+    blocks = re.findall(r"```python\n(.*?)\n```", readme, re.DOTALL)
+    block = next(
+        (
+            candidate
+            for candidate in blocks
+            if "async def refund_agent" in candidate and "TimeoutAfterCommit" in candidate
+        ),
+        None,
+    )
     assert block is not None
     script = tmp_path / "readme_quickstart.py"
-    script.write_text(block.group(1), encoding="utf-8")
+    script.write_text(block, encoding="utf-8")
 
     completed = subprocess.run(
         [sys.executable, str(script)],

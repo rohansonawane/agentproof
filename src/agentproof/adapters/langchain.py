@@ -20,7 +20,7 @@ class LangChainAdapter:
         try:
             from langchain_core.tools import StructuredTool
         except ImportError as exc:
-            raise RuntimeError("Install agentproof[langchain] to use LangChainAdapter") from exc
+            raise RuntimeError("Install agentproof-sim[langchain] to use LangChainAdapter") from exc
 
         tools = []
         for definition in world.tools.all():
@@ -40,7 +40,7 @@ class LangChainAdapter:
         try:
             from langchain.agents import create_agent
         except ImportError as exc:
-            raise RuntimeError("Install agentproof[langchain] to use LangChainAdapter") from exc
+            raise RuntimeError("Install agentproof-sim[langchain] to use LangChainAdapter") from exc
         return create_agent(model=model, tools=self.build_tools(world), system_prompt=system_prompt)
 
     async def run(self, *, world: Any, user_input: str) -> AgentRunResult:

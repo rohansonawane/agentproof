@@ -18,7 +18,7 @@ class OpenAIAgentsAdapter:
         try:
             from agents import FunctionTool
         except ImportError as exc:
-            raise RuntimeError("Install agentproof[openai] to use OpenAIAgentsAdapter") from exc
+            raise RuntimeError("Install agentproof-sim[openai] to use OpenAIAgentsAdapter") from exc
 
         wrapped = []
         for definition in world.tools.all():
@@ -47,7 +47,7 @@ class OpenAIAgentsAdapter:
         try:
             from agents import Runner
         except ImportError as exc:
-            raise RuntimeError("Install agentproof[openai] to use OpenAIAgentsAdapter") from exc
+            raise RuntimeError("Install agentproof-sim[openai] to use OpenAIAgentsAdapter") from exc
 
         original_tools = list(getattr(self.agent, "tools", []))
         self.agent.tools = self.build_function_tools(world)

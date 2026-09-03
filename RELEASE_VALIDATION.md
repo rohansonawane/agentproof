@@ -8,40 +8,43 @@ Host: macOS / Darwin, Python 3.12.9
 
 The repository initially contained only `AGENTPROOF_CODEX_BUILD_SPEC.md`; `IMPLEMENTATION_PLAN.md`, `RELEASE_VALIDATION.md`, source, tests, packaging, and examples were absent. That was a release-blocking defect.
 
-I implemented and validated a technical-preview `0.1.0` package with deterministic native execution, fault injection, replay, CLI, JSON/JUnit reports, pytest plugin, clean wheel install, local OpenAI/LangChain adapter-boundary coverage, and an opt-in live OpenAI Agents SDK smoke test.
+I implemented and validated a technical-preview `0.1.1` package with deterministic native execution, fault injection, replay, CLI, JSON/JUnit reports, pytest plugin, clean wheel install, local OpenAI/LangChain adapter-boundary coverage, and an opt-in live OpenAI Agents SDK smoke test.
 
-Release readiness is **technical preview only**, not full public-stable approval, because PyPI project ownership was not verified, no live LangChain provider test exists, and `reorder_tool_results` remains unsupported rather than falsely implemented.
+The public PyPI distribution name is now `agentproof-sim`; the Python import package and CLI remain `agentproof`. Live PyPI checks on 2026-09-03 showed `agentproof` and `agentproof-ai` are already occupied by unrelated projects, while `agentproof-sim` returned no project at check time. That name is not reserved until Rohan Sonawane creates/publishes the PyPI project from his own account.
+
+Release readiness is **technical preview only**, not full public-stable approval, because the `agentproof-sim` PyPI project has not yet been created under Rohan's account, no live LangChain provider test exists, and `reorder_tool_results` remains unsupported rather than falsely implemented.
 
 ## Commands Run
 
 | Command | Result |
 | --- | --- |
 | `python --version` | `Python 3.12.9` |
-| `ruff format --check .` | PASS, `82 files already formatted` |
+| `ruff format --check .` | PASS, `83 files already formatted` |
 | `ruff check .` | PASS, `All checks passed!` |
 | `mypy src/agentproof` | PASS, `Success: no issues found in 40 source files` |
-| `pytest -q` | PASS, `53 passed, 1 skipped` |
-| `env -u OPENAI_API_KEY -u AGENTPROOF_RUN_LIVE_TESTS pytest -q -m 'not live'` | PASS, `53 passed, 1 deselected` |
-| `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q -p pytest_asyncio.plugin -p pytest_cov --cov=agentproof --cov-report=term-missing` | PASS, `53 passed, 1 skipped`, total coverage `90%` |
-| `python -m build` | PASS, built `agentproof-0.1.0.tar.gz` and `agentproof-0.1.0-py3-none-any.whl` |
+| `pytest -q` | PASS, `55 passed, 1 skipped` |
+| `pytest -q -m 'not live'` with live environment removed | PASS, `55 passed, 1 deselected` |
+| `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 pytest -q -p pytest_asyncio.plugin -p pytest_cov --cov=agentproof --cov-report=term` | PASS, `55 passed, 1 skipped`, total coverage `90%` |
+| `python -m build` | PASS, built `agentproof_sim-0.1.1.tar.gz` and `agentproof_sim-0.1.1-py3-none-any.whl` |
 | `twine check dist/*` | PASS for wheel and sdist |
 | `pytest --trace-config -q` | PASS, `agentproof.pytest_plugin` registered |
 | `python scripts/release_hardening.py` | PASS, `13` checks passed, `2` opt-in checks skipped |
+| clean temp venv `python -m pip install -e ".[dev]"` | PASS, `agentproof-sim` metadata and `agentproof.__version__` both reported `0.1.1` |
 | `gh run watch 33746954869 --repo rohansonawane/agentproof --exit-status` | PASS, GitHub-hosted CI matrix passed on Python 3.11, 3.12, and 3.13 |
 | `python scripts/real_project_booking_smoke.py` | PASS, real external booking-agent tool produced duplicate side effects under retry and AgentProof caught it |
-| `python scripts/real_project_matrix.py` | PASS, 3 pinned public projects, 6 AgentProof runs, 8 actual effects recorded, 2 duplicate side-effect failures caught |
+| `python scripts/real_project_matrix.py` | PASS, 3 pinned public projects, 6 AgentProof runs, 8 actual effects recorded, 2 duplicate side-effect failures caught, `agentproof_version=0.1.1` |
 
 ## Clean-Environment Results
 
 Core wheel smoke:
 
 ```text
-pip install dist/agentproof-0.1.0-py3-none-any.whl
+pip install dist/agentproof_sim-0.1.1-py3-none-any.whl
 agentproof mutations
 python readme_quickstart.py
 ```
 
-Result: PASS. The installed CLI listed mutations, and the README quickstart printed:
+Result: PASS. The installed `agentproof-sim` wheel exposed `import agentproof` and the `agentproof` CLI. The CLI listed mutations, and the README quickstart printed:
 
 ```text
 INVARIANT_FAILURE
@@ -52,7 +55,7 @@ INVARIANT_FAILURE
 Optional extras clean solve:
 
 ```text
-pip install 'dist/agentproof-0.1.0-py3-none-any.whl[openai,langchain]'
+pip install 'dist/agentproof_sim-0.1.1-py3-none-any.whl[openai,langchain]'
 ```
 
 Result: PASS.
@@ -60,7 +63,7 @@ Result: PASS.
 ```text
 openai-agents 0.22.0 FunctionTool
 brotli 1.2.0
-langchain 1.3.18 True
+langchain 1.4.0 True
 langgraph 1.2.11 ToolNode
 ```
 
@@ -165,6 +168,9 @@ Rejected from the evidence count after inspection: `kapa-ai/langchain-agent-exam
 - README quickstart was changed to avoid leaving artifacts during example-test execution.
 - Live OpenAI execution failed in this environment with `brotli==1.0.9` because `httpx2` expects Brotli transport support compatible with `httpx2[brotli]`; the `openai` extra now requires `httpx2[brotli]>=2.12,<3` and the optional-extras smoke asserts `brotli 1.2.0`.
 - `scripts/release_hardening.py --live` initially allowed ordinary pytest, coverage, and plugin-trace gates to consume live credentials repeatedly; only the dedicated live gate now runs live tests.
+- Adding a small README import snippet initially broke the README quickstart smoke test because it grabbed the first Python block. The extractor now selects the executable refund quickstart by content.
+- The PyPI distribution name `agentproof` was already taken, and `agentproof-ai` was also occupied. Packaging was moved to `agentproof-sim` while preserving `import agentproof` and the `agentproof` CLI.
+- The release-hardening wheel selector initially assumed `agentproof-*.whl`; it now derives the wheel filename stem from `pyproject.toml` and cleans generated build artifacts before rebuilding.
 
 ## Third-Party Documentation Verified
 
@@ -188,6 +194,6 @@ Live model tests and hosted GitHub Actions are intentionally not automatic by de
 
 - The OpenAI live smoke test passed, but no live LangChain provider test exists yet. Live tests remain opt-in.
 - Real-project evidence currently covers 3 public pinned projects. That is useful launch evidence, not a statistical guarantee across the agent ecosystem.
-- PyPI project ownership and Trusted Publisher configuration were not verified.
+- The `agentproof-sim` PyPI project has not yet been created/reserved under Rohan Sonawane's account, and Trusted Publisher configuration still needs to be completed before PyPI publication.
 - `reorder_tool_results` is not stable and intentionally raises unsupported instead of pretending to work.
 - `duplicate_tool_result` is implemented as a deterministic duplicate-result envelope but remains experimental because framework agent-loop semantics vary.

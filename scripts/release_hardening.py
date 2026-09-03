@@ -9,11 +9,14 @@ import subprocess
 import sys
 import tempfile
 import textwrap
+import tomllib
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any, TypeAlias
 from xml.etree import ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
+CommandSpec: TypeAlias = tuple[str, list[str]] | tuple[str, list[str], dict[str, str]]
 
 
 @dataclass
@@ -65,7 +68,7 @@ def record_python() -> Check:
 
 def run_local_quality_gates() -> list[Check]:
     local_env = without_env("AGENTPROOF_RUN_LIVE_TESTS")
-    commands = [
+    commands: list[CommandSpec] = [
         ("Ruff format", ["ruff", "format", "--check", "."]),
         ("Ruff lint", ["ruff", "check", "."]),
         ("Mypy", ["mypy", "src/agentproof"]),
@@ -91,10 +94,8 @@ def run_local_quality_gates() -> list[Check]:
         ),
     ]
     results: list[Check] = []
-    for item in commands:
-        name = item[0]
-        command = item[1]
-        env = item[2] if len(item) == 3 else None
+    for name, command, *rest in commands:
+        env = rest[0] if rest else None
         completed = run(command, env=env)
         detail = summarize_output(completed.stdout + completed.stderr)
         results.append(
@@ -106,20 +107,28 @@ def run_local_quality_gates() -> list[Check]:
 
 
 def run_packaging_gates() -> list[Check]:
+    shutil.rmtree(ROOT / "dist", ignore_errors=True)
+    shutil.rmtree(ROOT / "build", ignore_errors=True)
     build = run([sys.executable, "-m", "build"])
     twine_paths = sorted(str(path) for path in (ROOT / "dist").glob("*"))
     twine = run(["twine", "check", *twine_paths]) if twine_paths else missing("no dist files")
+    build_detail = summarize_output(build.stdout + build.stderr)
+    if build.returncode == 0 and twine_paths:
+        build_detail = "built " + ", ".join(Path(path).name for path in twine_paths)
+    twine_detail = summarize_output(twine.stdout + twine.stderr)
+    if twine.returncode == 0 and twine_paths:
+        twine_detail = ", ".join(f"{Path(path).name}: PASSED" for path in twine_paths)
     return [
         Check(
             "Build wheel/sdist",
             status_from(build),
-            summarize_output(build.stdout + build.stderr),
+            build_detail,
             "python -m build",
         ),
         Check(
             "Twine check",
             status_from(twine),
-            summarize_output(twine.stdout + twine.stderr),
+            twine_detail,
             "twine check dist/*",
         ),
     ]
@@ -127,6 +136,7 @@ def run_packaging_gates() -> list[Check]:
 
 def run_core_wheel_smoke() -> Check:
     wheel = wheel_path()
+    distribution_name = project_metadata()["name"]
     with tempfile.TemporaryDirectory(prefix="agentproof-wheel-smoke-") as temp:
         temp_path = Path(temp)
         venv = temp_path / ".venv"
@@ -135,6 +145,18 @@ def run_core_wheel_smoke() -> Check:
         commands = [
             ([python_bin(venv), "-m", "pip", "install", "-q", "--upgrade", "pip"], None),
             ([python_bin(venv), "-m", "pip", "install", "-q", str(wheel)], None),
+            (
+                [
+                    python_bin(venv),
+                    "-c",
+                    (
+                        "from importlib.metadata import version; "
+                        "import agentproof; "
+                        f"assert agentproof.__version__ == version({distribution_name!r})"
+                    ),
+                ],
+                None,
+            ),
             ([script_bin(venv, "agentproof"), "mutations"], None),
         ]
         for command, env in commands:
@@ -388,19 +410,27 @@ def script_bin(venv: Path, name: str) -> str:
 
 
 def wheel_path() -> Path:
-    wheels = sorted((ROOT / "dist").glob("agentproof-*.whl"))
+    wheel_stem = re.sub(r"[-_.]+", "_", project_metadata()["name"]).lower()
+    wheels = sorted((ROOT / "dist").glob(f"{wheel_stem}-*.whl"))
     if not wheels:
-        raise FileNotFoundError("no built AgentProof wheel under dist/")
+        raise FileNotFoundError(
+            f"no built AgentProof wheel matching {wheel_stem}-*.whl under dist/"
+        )
     return wheels[-1]
 
 
+def project_metadata() -> dict[str, Any]:
+    return tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))["project"]
+
+
 def readme_quickstart() -> str:
-    match = re.search(
+    blocks = re.findall(
         r"```python\n(.*?)\n```", (ROOT / "README.md").read_text(encoding="utf-8"), re.DOTALL
     )
-    if match is None:
-        raise ValueError("README has no Python quickstart block")
-    return match.group(1)
+    for block in blocks:
+        if "async def refund_agent" in block and "TimeoutAfterCommit" in block:
+            return block
+    raise ValueError("README has no executable refund quickstart block")
 
 
 def external_project_suite() -> str:

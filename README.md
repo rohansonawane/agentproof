@@ -47,14 +47,20 @@ That separation is what lets `timeout_after_commit` catch duplicate refunds, boo
 ## Install
 
 ```bash
-pip install agentproof
+pip install agentproof-sim
+```
+
+The PyPI distribution is `agentproof-sim` because `agentproof` is already occupied by an unrelated package. The Python import and CLI remain stable:
+
+```python
+import agentproof
 ```
 
 Optional framework adapters are installed separately:
 
 ```bash
-pip install "agentproof[openai]"
-pip install "agentproof[langchain]"
+pip install "agentproof-sim[openai]"
+pip install "agentproof-sim[langchain]"
 ```
 
 ## Five-Minute Quickstart
@@ -341,13 +347,13 @@ Build and validate a wheel:
 python -m build
 twine check dist/*
 python -m venv /tmp/agentproof-wheel-smoke
-/tmp/agentproof-wheel-smoke/bin/python -m pip install dist/*.whl
+/tmp/agentproof-wheel-smoke/bin/python -m pip install dist/agentproof_sim-*.whl
 /tmp/agentproof-wheel-smoke/bin/agentproof mutations
 ```
 
 ## Status
 
-AgentProof is a `0.1.0` technical preview. Deterministic native execution, report generation, replay, adapter-boundary tests, clean wheel install, and CI are automated. Live model validation remains opt-in and depends on user-supplied credentials.
+AgentProof is a `0.1.1` technical preview. Deterministic native execution, report generation, replay, adapter-boundary tests, clean wheel install, and CI are automated. Live model validation remains opt-in and depends on user-supplied credentials.
 
 ## License
 

@@ -1,6 +1,6 @@
 # Production Readiness
 
-AgentProof can help teams prepare tool-using agents for production, but AgentProof itself should be treated as a `0.1.0` technical preview until the API has more external adoption.
+AgentProof can help teams prepare tool-using agents for production, but AgentProof itself should be treated as a `0.1.1` technical preview until the API has more external adoption.
 
 This document separates two questions:
 

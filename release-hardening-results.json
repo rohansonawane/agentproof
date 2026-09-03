@@ -10,7 +10,7 @@
     {
       "name": "Ruff format",
       "status": "PASS",
-      "detail": "82 files already formatted",
+      "detail": "83 files already formatted",
       "command": "ruff format --check ."
     },
     {
@@ -28,31 +28,31 @@
     {
       "name": "Pytest",
       "status": "PASS",
-      "detail": "s.....................................................                   [100%] | 53 passed, 1 skipped in 1.76s",
+      "detail": "s.......................................................                 [100%] | 55 passed, 1 skipped in 1.82s",
       "command": "pytest -q"
     },
     {
       "name": "Keyless deterministic pytest",
       "status": "PASS",
-      "detail": ".....................................................                    [100%] | 53 passed, 1 deselected in 1.73s",
+      "detail": ".......................................................                  [100%] | 55 passed, 1 deselected in 1.62s",
       "command": "pytest -q -m not live"
     },
     {
       "name": "Coverage",
       "status": "PASS",
-      "detail": "src/agentproof/tools/registry.py              67      7    90% | -------------------------------------------------------------- | TOTAL                                       1370    136    90% | 53 passed, 1 skipped in 3.46s",
+      "detail": "src/agentproof/tools/registry.py              67      7    90% | -------------------------------------------------------------- | TOTAL                                       1374    135    90% | 55 passed, 1 skipped in 3.20s",
       "command": "pytest -q -p pytest_asyncio.plugin -p pytest_cov --cov=agentproof --cov-report=term"
     },
     {
       "name": "Build wheel/sdist",
       "status": "PASS",
-      "detail": "* Getting build dependencies for wheel... | * Installed build dependency versions: | - hatchling==1.32.0 | * Building wheel...",
+      "detail": "built agentproof_sim-0.1.1-py3-none-any.whl, agentproof_sim-0.1.1.tar.gz",
       "command": "python -m build"
     },
     {
       "name": "Twine check",
       "status": "PASS",
-      "detail": "Checking | /Users/rohan/Desktop/Project/Agentproof/dist/agentproof-0.1.0-py3-none-any.whl: PASSED | Checking /Users/rohan/Desktop/Project/Agentproof/dist/agentproof-0.1.0.tar.gz: PASSED",
+      "detail": "agentproof_sim-0.1.1-py3-none-any.whl: PASSED, agentproof_sim-0.1.1.tar.gz: PASSED",
       "command": "twine check dist/*"
     },
     {
@@ -64,7 +64,7 @@
     {
       "name": "Optional extras smoke",
       "status": "PASS",
-      "detail": "openai-agents 0.22.0 FunctionTool | brotli 1.2.0 | langchain 1.3.18 True | langgraph 1.2.11 ToolNode",
+      "detail": "openai-agents 0.22.0 FunctionTool | brotli 1.2.0 | langchain 1.4.0 True | langgraph 1.2.11 ToolNode",
       "command": null
     },
     {

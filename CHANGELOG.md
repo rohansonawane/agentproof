@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.1
+
+- Prepared the public package for PyPI publication under `agentproof-sim`.
+- Kept the Python import package and CLI as `agentproof`.
+- Updated install docs, packaging metadata, clean-wheel smoke checks, and adapter error messages for the new distribution name.
+- Documented why `agentproof` and `agentproof-ai` should not be used as PyPI names.
+
 ## 0.1.0
 
 - Initial technical-preview implementation.

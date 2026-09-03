@@ -1,7 +1,7 @@
 {
   "passed": true,
-  "generated_at": "2026-09-03T12:27:05.915844+00:00",
-  "agentproof_version": "0.1.0",
+  "generated_at": "2026-09-03T20:48:18.857843+00:00",
+  "agentproof_version": "0.1.1",
   "agentproof_source": "local checkout installed into a clean temporary virtual environment",
   "summary": {
     "projects_tested": 3,

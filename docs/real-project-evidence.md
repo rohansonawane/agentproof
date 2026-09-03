@@ -15,7 +15,7 @@ python scripts/real_project_matrix.py
 
 The script writes `real-project-matrix-results.json`.
 
-Latest verified summary:
+Latest verified summary for AgentProof `0.1.1`:
 
 | Metric | Value |
 | --- | ---: |

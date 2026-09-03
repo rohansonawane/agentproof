@@ -12,10 +12,17 @@ from agentproof.core.trace import TraceEvent
 from agentproof.core.world import World
 from agentproof.mutations.base import Mutation
 
-try:
-    __version__ = version("agentproof")
-except PackageNotFoundError:
-    __version__ = "0.1.0"
+
+def _distribution_version() -> str:
+    for distribution_name in ("agentproof-sim", "agentproof"):
+        try:
+            return version(distribution_name)
+        except PackageNotFoundError:
+            continue
+    return "0.1.1"
+
+
+__version__ = _distribution_version()
 
 __all__ = [
     "AgentTest",
