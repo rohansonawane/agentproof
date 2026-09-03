@@ -45,6 +45,8 @@ This is best-effort protection, not comprehensive data-loss prevention. AgentPro
 
 Prefer synthetic data in scenarios and avoid placing secrets in `world.state`, `world.metadata`, tool inputs, tool outputs, effect payloads, or invariant failure messages.
 
+This GitHub repository has secret scanning and push protection enabled where available. Those controls reduce accidental leaks, but they do not replace local care with credentials.
+
 ## Live LLM Tests
 
 Live tests may send prompts, tool names, tool schemas, and relevant context to the configured model provider. They are skipped by default and require explicit opt-in:

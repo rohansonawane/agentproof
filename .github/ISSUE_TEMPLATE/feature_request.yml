@@ -1,0 +1,31 @@
+name: Feature Request
+description: Suggest a mutation, adapter, report format, or workflow improvement.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: use_case
+    attributes:
+      label: Real-world use case
+      description: What agent behavior or failure mode should AgentProof help test?
+      placeholder: "Example: prevent duplicate appointment bookings when a booking API times out after committing."
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: Proposed behavior
+      description: Describe the mutation, adapter, invariant helper, CLI option, or docs improvement.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: implementation_truth
+    attributes:
+      label: Implementation expectations
+      options:
+        - label: If this is documented as supported, it should include real implementation coverage and tests.
+          required: true

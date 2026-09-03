@@ -41,6 +41,7 @@ dev = [
 
 [project.urls]
 Homepage = "https://github.com/rohansonawane/agentproof"
+Documentation = "https://github.com/rohansonawane/agentproof/tree/main/docs"
 Issues = "https://github.com/rohansonawane/agentproof/issues"
 
 [project.scripts]

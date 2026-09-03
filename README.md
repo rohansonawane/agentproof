@@ -19,6 +19,8 @@ It is useful for agents that can change things:
 - modifying files or repositories;
 - running internal operations or DevOps workflows.
 
+See [Real-World Use Cases](docs/use-cases.md) for concrete examples and invariants.
+
 AgentProof does not prove that an agent is universally safe or correct. It gives you repeatable tests for dangerous action-level failures before they reach production.
 
 ## Why This Exists
@@ -312,6 +314,14 @@ timeout_after_commit: 2 appointments, INVARIANT_FAILURE
 ```
 
 The failure is expected. It means AgentProof detected a real duplicate side effect in a real app integration.
+
+## Production Use
+
+AgentProof can be used in production engineering workflows as a pre-release and regression-testing tool. It should not be used as a runtime safety boundary for live autonomous agents.
+
+Before relying on it for a real app, define virtual or staging versions of every destructive tool, add invariants for every high-risk action, run deterministic tests in CI without API keys, and keep live model checks opt-in.
+
+See [Production Readiness](docs/production-readiness.md) for the full checklist and current limits.
 
 ## Development
 

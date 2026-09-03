@@ -1,0 +1,54 @@
+name: Bug Report
+description: Report incorrect AgentProof behavior or a failing scenario.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve AgentProof.
+
+        Before attaching traces, replay files, JSON reports, or JUnit reports, remove secrets and sensitive business data.
+  - type: input
+    id: version
+    attributes:
+      label: AgentProof version or commit
+      placeholder: "0.1.0 or git SHA"
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the incorrect behavior, including the scenario and mutation if relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      description: Include commands, a small scenario, or a redacted replay artifact path.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation already run
+      description: Paste relevant output from pytest, agentproof CLI, or release-hardening checks.
+      render: shell
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety check
+      options:
+        - label: I have removed API keys, tokens, customer data, and sensitive production payloads from this report.
+          required: true
+        - label: This report does not require maintainers to call a real destructive external service.
+          required: true

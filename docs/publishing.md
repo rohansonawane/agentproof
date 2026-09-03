@@ -2,6 +2,8 @@
 
 Publication is manual. The release workflow uses PyPI Trusted Publishing/OIDC and does not store PyPI API tokens in the repository.
 
+Publishing a GitHub Release triggers `.github/workflows/release.yml`. Do not publish a release until the PyPI Trusted Publisher is configured or the PyPI publish job has intentionally been disabled for a GitHub-only release.
+
 Before publishing:
 
 1. Confirm the PyPI project name.
@@ -9,4 +11,3 @@ Before publishing:
 3. Prefer a protected `pypi` environment.
 4. Build, check, install, and smoke-test the wheel in a clean environment.
 5. Run live tests only with explicit credentials and `AGENTPROOF_RUN_LIVE_TESTS=1`.
-
