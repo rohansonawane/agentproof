@@ -22,9 +22,9 @@ classifiers = [
   "Topic :: Software Development :: Testing",
 ]
 dependencies = [
-  "click>=8.1,<9",
-  "pydantic>=2.12,<3",
-  "rich>=13,<16",
+  "click>=8.5.0,<9",
+  "pydantic>=2.13.5,<3",
+  "rich>=15.0.0,<16",
 ]
 
 [project.optional-dependencies]
