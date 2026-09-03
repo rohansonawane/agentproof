@@ -1,8 +1,8 @@
 # Publishing
 
-Publication is manual. The release workflow uses PyPI Trusted Publishing/OIDC and does not store PyPI API tokens in the repository.
+Publication is manual. The release workflow can use PyPI Trusted Publishing/OIDC and does not store PyPI API tokens in the repository.
 
-Publishing a GitHub Release triggers `.github/workflows/release.yml`. Do not publish a release until the PyPI Trusted Publisher is configured or the PyPI publish job has intentionally been disabled for a GitHub-only release.
+Publishing a GitHub Release triggers `.github/workflows/release.yml` to build and validate distributions, but it does not publish to PyPI. PyPI publishing only runs from a manual `workflow_dispatch` when `publish_to_pypi=true`.
 
 Before publishing:
 

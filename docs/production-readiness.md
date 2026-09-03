@@ -66,8 +66,8 @@ The public GitHub repository is configured with:
 - force pushes and branch deletion disabled on `main`;
 - issue templates for bug reports and feature requests;
 - a pull request template with validation and safety checklists;
-- Dependabot version update configuration for Python packages and GitHub Actions;
-- Dependabot security updates enabled;
+- Dependabot version update configuration for GitHub Actions;
+- Dependabot security updates enabled for vulnerable dependencies;
 - secret scanning and push protection enabled where GitHub supports them;
 - wiki disabled so documentation stays versioned in the repository.
 
