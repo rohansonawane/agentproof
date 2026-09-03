@@ -17,7 +17,7 @@ Release readiness is **technical preview only**, not full public-stable approval
 | Command | Result |
 | --- | --- |
 | `python --version` | `Python 3.12.9` |
-| `ruff format --check .` | PASS, `74 files already formatted` |
+| `ruff format --check .` | PASS, `75 files already formatted` |
 | `ruff check .` | PASS, `All checks passed!` |
 | `mypy src/agentproof` | PASS, `Success: no issues found in 40 source files` |
 | `pytest -q` | PASS, `50 passed, 1 skipped` |
@@ -28,6 +28,7 @@ Release readiness is **technical preview only**, not full public-stable approval
 | `pytest --trace-config -q` | PASS, `agentproof.pytest_plugin` registered |
 | `python scripts/release_hardening.py --live` | PASS, `14` checks passed, `1` external check skipped |
 | `gh run watch 33746954869 --repo rohansonawane/agentproof --exit-status` | PASS, GitHub-hosted CI matrix passed on Python 3.11, 3.12, and 3.13 |
+| `python scripts/real_project_booking_smoke.py` | PASS, real external booking-agent tool produced duplicate side effects under retry and AgentProof caught it |
 
 ## Clean-Environment Results
 
@@ -69,6 +70,16 @@ python scripts/release_hardening.py
 ```
 
 Result: PASS. The automation installed the built wheel into an independent temporary project, ran a separate billing-agent suite through the installed `agentproof` CLI, verified the command failed with exit code `1`, parsed JSON/JUnit output, and confirmed two actual `payment.charged` effects.
+
+Real external-project smoke:
+
+```text
+python scripts/real_project_booking_smoke.py
+```
+
+Target: `aniket-work/Lets-Build-Online-Booking-System-Using-AI-Agents` at commit `7cc5937038ceb9d90a1212257d31233d265ef519`.
+
+Result: PASS. The script cloned the Apache-2.0 project into a temporary directory, installed AgentProof and minimal dependencies in a clean virtual environment, imported the project's real LangChain `book_appointment` tool, and wrapped its actual `streamlit.session_state.appointments` mutation as an AgentProof effect. Baseline produced one `appointment.booked` effect. With `TimeoutAfterCommit(target="book_appointment")`, the retrying agent produced two real appointments at the same time, and AgentProof reported `INVARIANT_FAILURE` for `no_duplicate_appointments`.
 
 ## Required Verification Checklist
 
@@ -136,6 +147,8 @@ Result: PASS. The automation installed the built wheel into an independent tempo
 ## Automated Follow-Up
 
 `scripts/release_hardening.py` now automates the repeatable local release gate. It runs format, lint, type checking, pytest with live tests disabled, keyless pytest, coverage with live tests disabled, build, Twine metadata validation, clean core wheel smoke, README quickstart smoke, optional OpenAI/LangChain extras install smoke, independent external toy-project smoke, pytest plugin registration tracing with live tests disabled, and a dedicated opt-in live gate. It writes machine-readable results to `release-hardening-results.json`.
+
+`scripts/real_project_booking_smoke.py` adds a networked manual launch-confidence check against a pinned public repo. It is intentionally separate from default CI because it depends on GitHub availability and a third-party repository.
 
 Live model tests and hosted GitHub Actions are intentionally not automatic by default. Use `--live` with `AGENTPROOF_RUN_LIVE_TESTS=1` and credentials for live tests, and `--github` with a git repository plus authenticated `gh` CLI for hosted CI triggering. On 2026-09-03, the OpenAI live smoke test passed with user-supplied credentials, and GitHub-hosted CI passed after pushing to `rohansonawane/agentproof`.
 

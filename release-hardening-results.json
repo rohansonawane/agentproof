@@ -10,7 +10,7 @@
     {
       "name": "Ruff format",
       "status": "PASS",
-      "detail": "74 files already formatted",
+      "detail": "75 files already formatted",
       "command": "ruff format --check ."
     },
     {
@@ -28,19 +28,19 @@
     {
       "name": "Pytest",
       "status": "PASS",
-      "detail": "s..................................................                      [100%] | 50 passed, 1 skipped in 1.40s",
+      "detail": "s..................................................                      [100%] | 50 passed, 1 skipped in 1.86s",
       "command": "pytest -q"
     },
     {
       "name": "Keyless deterministic pytest",
       "status": "PASS",
-      "detail": "..................................................                       [100%] | 50 passed, 1 deselected in 1.42s",
+      "detail": "..................................................                       [100%] | 50 passed, 1 deselected in 1.66s",
       "command": "pytest -q -m not live"
     },
     {
       "name": "Coverage",
       "status": "PASS",
-      "detail": "src/agentproof/tools/registry.py              67      7    90% | -------------------------------------------------------------- | TOTAL                                       1370    136    90% | 50 passed, 1 skipped in 2.89s",
+      "detail": "src/agentproof/tools/registry.py              67      7    90% | -------------------------------------------------------------- | TOTAL                                       1370    136    90% | 50 passed, 1 skipped in 3.25s",
       "command": "pytest -q -p pytest_asyncio.plugin -p pytest_cov --cov=agentproof --cov-report=term"
     },
     {
@@ -82,7 +82,7 @@
     {
       "name": "Live tests",
       "status": "PASS",
-      "detail": ".                                                                        [100%] | 1 passed, 50 deselected in 5.33s",
+      "detail": ".                                                                        [100%] | 1 passed, 50 deselected in 9.65s",
       "command": null
     },
     {

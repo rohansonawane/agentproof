@@ -1,0 +1,82 @@
+{
+  "external_project": "aniket-work/Lets-Build-Online-Booking-System-Using-AI-Agents",
+  "summary": {
+    "total": 2,
+    "passed": 1,
+    "failed": 1
+  },
+  "runs": [
+    {
+      "name": "book_one_appointment:baseline",
+      "status": "PASS",
+      "effect_count": 1,
+      "violated_invariants": [],
+      "failure": null,
+      "effects": [
+        {
+          "id": "eff_001",
+          "type": "appointment.booked",
+          "tool_name": "book_appointment",
+          "operation": "create",
+          "resource": "appointment:2026-09-10T10:30:00",
+          "data": {
+            "appointment_index": 1,
+            "name": "Rohan",
+            "type": "demo",
+            "time": "2026-09-10T10:30:00"
+          },
+          "committed_at": 0.0,
+          "idempotency_key": null,
+          "invocation_id": "invocation_001"
+        }
+      ]
+    },
+    {
+      "name": "book_one_appointment:timeout_after_commit:book_appointment",
+      "status": "INVARIANT_FAILURE",
+      "effect_count": 2,
+      "violated_invariants": [
+        "no_duplicate_appointments"
+      ],
+      "failure": "booked 2 appointments, expected <= 1",
+      "effects": [
+        {
+          "id": "eff_001",
+          "type": "appointment.booked",
+          "tool_name": "book_appointment",
+          "operation": "create",
+          "resource": "appointment:2026-09-10T10:30:00",
+          "data": {
+            "appointment_index": 1,
+            "name": "Rohan",
+            "type": "demo",
+            "time": "2026-09-10T10:30:00"
+          },
+          "committed_at": 0.0,
+          "idempotency_key": null,
+          "invocation_id": "invocation_001"
+        },
+        {
+          "id": "eff_002",
+          "type": "appointment.booked",
+          "tool_name": "book_appointment",
+          "operation": "create",
+          "resource": "appointment:2026-09-10T10:30:00",
+          "data": {
+            "appointment_index": 2,
+            "name": "Rohan",
+            "type": "demo",
+            "time": "2026-09-10T10:30:00"
+          },
+          "committed_at": 0.0,
+          "idempotency_key": null,
+          "invocation_id": "invocation_002"
+        }
+      ]
+    }
+  ],
+  "passed": true,
+  "repo_url": "https://github.com/aniket-work/Lets-Build-Online-Booking-System-Using-AI-Agents.git",
+  "requested_ref": "7cc5937038ceb9d90a1212257d31233d265ef519",
+  "actual_ref": "7cc5937038ceb9d90a1212257d31233d265ef519"
+}

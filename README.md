@@ -211,6 +211,17 @@ AGENTPROOF_RUN_LIVE_TESTS=1 OPENAI_API_KEY=... python scripts/release_hardening.
 python scripts/release_hardening.py --github
 ```
 
+For a real external-project smoke test:
+
+```bash
+python scripts/real_project_booking_smoke.py
+```
+
+That command clones the Apache-2.0 booking-agent project
+`aniket-work/Lets-Build-Online-Booking-System-Using-AI-Agents`, wraps its real
+LangChain `book_appointment` tool, and verifies AgentProof catches duplicate
+bookings caused by retry-after-timeout.
+
 ## Status
 
 AgentProof is a `0.1.0` technical preview. Deterministic native, report, replay, and local adapter-boundary tests are automated. Live model validation remains opt-in and depends on user-supplied credentials.
