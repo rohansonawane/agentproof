@@ -56,6 +56,21 @@ The current repository validates:
 - executable README quickstart;
 - real external LangChain booking-app smoke test.
 
+## GitHub Repository Controls
+
+The public GitHub repository is configured with:
+
+- CI on pushes, pull requests, and manual workflow dispatch;
+- required `main` branch status checks for Python 3.11, 3.12, and 3.13;
+- linear history on `main`;
+- force pushes and branch deletion disabled on `main`;
+- issue templates for bug reports and feature requests;
+- a pull request template with validation and safety checklists;
+- Dependabot version update configuration for Python packages and GitHub Actions;
+- Dependabot security updates enabled;
+- secret scanning and push protection enabled where GitHub supports them;
+- wiki disabled so documentation stays versioned in the repository.
+
 ## Current Limits
 
 Do not overstate the project:
