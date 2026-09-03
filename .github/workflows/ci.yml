@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: python -m pip install -e ".[dev]"
+      - name: Ruff format
+        run: ruff format --check .
+      - name: Ruff lint
+        run: ruff check .
+      - name: Type check
+        run: mypy src/agentproof
+      - name: Tests
+        run: pytest -q -m "not live"
+      - name: Build and check
+        if: matrix.python-version == '3.12'
+        run: |
+          python -m build
+          twine check dist/*
+      - name: Wheel smoke test
+        if: matrix.python-version == '3.12'
+        run: |
+          python -m venv /tmp/agentproof-wheel-smoke
+          /tmp/agentproof-wheel-smoke/bin/python -m pip install dist/*.whl
+          /tmp/agentproof-wheel-smoke/bin/agentproof mutations

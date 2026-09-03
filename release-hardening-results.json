@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "results": [
+    {
+      "name": "Python version",
+      "status": "PASS",
+      "detail": "3.12.9",
+      "command": "python --version"
+    },
+    {
+      "name": "Ruff format",
+      "status": "PASS",
+      "detail": "74 files already formatted",
+      "command": "ruff format --check ."
+    },
+    {
+      "name": "Ruff lint",
+      "status": "PASS",
+      "detail": "All checks passed!",
+      "command": "ruff check ."
+    },
+    {
+      "name": "Mypy",
+      "status": "PASS",
+      "detail": "Success: no issues found in 40 source files",
+      "command": "mypy src/agentproof"
+    },
+    {
+      "name": "Pytest",
+      "status": "PASS",
+      "detail": "s..................................................                      [100%] | 50 passed, 1 skipped in 1.40s",
+      "command": "pytest -q"
+    },
+    {
+      "name": "Keyless deterministic pytest",
+      "status": "PASS",
+      "detail": "..................................................                       [100%] | 50 passed, 1 deselected in 1.42s",
+      "command": "pytest -q -m not live"
+    },
+    {
+      "name": "Coverage",
+      "status": "PASS",
+      "detail": "src/agentproof/tools/registry.py              67      7    90% | -------------------------------------------------------------- | TOTAL                                       1370    136    90% | 50 passed, 1 skipped in 2.89s",
+      "command": "pytest -q -p pytest_asyncio.plugin -p pytest_cov --cov=agentproof --cov-report=term"
+    },
+    {
+      "name": "Build wheel/sdist",
+      "status": "PASS",
+      "detail": "* Getting build dependencies for wheel... | * Installed build dependency versions: | - hatchling==1.32.0 | * Building wheel...",
+      "command": "python -m build"
+    },
+    {
+      "name": "Twine check",
+      "status": "PASS",
+      "detail": "Checking | /Users/rohan/Desktop/Project/Agentproof/dist/agentproof-0.1.0-py3-none-any.whl: PASSED | Checking /Users/rohan/Desktop/Project/Agentproof/dist/agentproof-0.1.0.tar.gz: PASSED",
+      "command": "twine check dist/*"
+    },
+    {
+      "name": "Clean core wheel smoke",
+      "status": "PASS",
+      "detail": "INVARIANT_FAILURE | ['no_double_refunds'] | 98.0",
+      "command": null
+    },
+    {
+      "name": "Optional extras smoke",
+      "status": "PASS",
+      "detail": "openai-agents 0.22.0 FunctionTool | brotli 1.2.0 | langchain 1.3.18 True | langgraph 1.2.11 ToolNode",
+      "command": null
+    },
+    {
+      "name": "External toy project smoke",
+      "status": "PASS",
+      "detail": "independent temp project found duplicate charge",
+      "command": null
+    },
+    {
+      "name": "Pytest plugin entry point",
+      "status": "PASS",
+      "detail": "agentproof.pytest_plugin registered",
+      "command": null
+    },
+    {
+      "name": "Live tests",
+      "status": "PASS",
+      "detail": ".                                                                        [100%] | 1 passed, 50 deselected in 5.33s",
+      "command": null
+    },
+    {
+      "name": "GitHub Actions CI matrix",
+      "status": "SKIP",
+      "detail": "pass --github to trigger with gh",
+      "command": null
+    }
+  ],
+  "summary": {
+    "passed": 14,
+    "failed": 0,
+    "skipped": 1
+  }
+}
