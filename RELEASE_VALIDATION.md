@@ -10,7 +10,7 @@ The repository initially contained only `AGENTPROOF_CODEX_BUILD_SPEC.md`; `IMPLE
 
 I implemented and validated a technical-preview `0.1.0` package with deterministic native execution, fault injection, replay, CLI, JSON/JUnit reports, pytest plugin, clean wheel install, local OpenAI/LangChain adapter-boundary coverage, and an opt-in live OpenAI Agents SDK smoke test.
 
-Release readiness is **technical preview only**, not full public-stable approval, because hosted GitHub Actions was not run, no live LangChain provider test exists, and `reorder_tool_results` remains unsupported rather than falsely implemented.
+Release readiness is **technical preview only**, not full public-stable approval, because PyPI project ownership was not verified, no live LangChain provider test exists, and `reorder_tool_results` remains unsupported rather than falsely implemented.
 
 ## Commands Run
 
@@ -27,6 +27,7 @@ Release readiness is **technical preview only**, not full public-stable approval
 | `twine check dist/*` | PASS for wheel and sdist |
 | `pytest --trace-config -q` | PASS, `agentproof.pytest_plugin` registered |
 | `python scripts/release_hardening.py --live` | PASS, `14` checks passed, `1` external check skipped |
+| `gh run watch 33746954869 --repo rohansonawane/agentproof --exit-status` | PASS, GitHub-hosted CI matrix passed on Python 3.11, 3.12, and 3.13 |
 
 ## Clean-Environment Results
 
@@ -136,12 +137,11 @@ Result: PASS. The automation installed the built wheel into an independent tempo
 
 `scripts/release_hardening.py` now automates the repeatable local release gate. It runs format, lint, type checking, pytest with live tests disabled, keyless pytest, coverage with live tests disabled, build, Twine metadata validation, clean core wheel smoke, README quickstart smoke, optional OpenAI/LangChain extras install smoke, independent external toy-project smoke, pytest plugin registration tracing with live tests disabled, and a dedicated opt-in live gate. It writes machine-readable results to `release-hardening-results.json`.
 
-Live model tests and hosted GitHub Actions are intentionally not automatic by default. Use `--live` with `AGENTPROOF_RUN_LIVE_TESTS=1` and credentials for live tests, and `--github` with a git repository plus authenticated `gh` CLI for hosted CI triggering. On 2026-09-03, the OpenAI live smoke test passed with user-supplied credentials.
+Live model tests and hosted GitHub Actions are intentionally not automatic by default. Use `--live` with `AGENTPROOF_RUN_LIVE_TESTS=1` and credentials for live tests, and `--github` with a git repository plus authenticated `gh` CLI for hosted CI triggering. On 2026-09-03, the OpenAI live smoke test passed with user-supplied credentials, and GitHub-hosted CI passed after pushing to `rohansonawane/agentproof`.
 
 ## Known Limitations
 
 - The OpenAI live smoke test passed, but no live LangChain provider test exists yet. Live tests remain opt-in.
-- GitHub Actions matrix was not executed on GitHub-hosted runners; local validation used Python 3.12.9 only.
 - PyPI project ownership and Trusted Publisher configuration were not verified.
 - `reorder_tool_results` is not stable and intentionally raises unsupported instead of pretending to work.
 - `duplicate_tool_result` is implemented as a deterministic duplicate-result envelope but remains experimental because framework agent-loop semantics vary.
